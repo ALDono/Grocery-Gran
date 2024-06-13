@@ -4,6 +4,21 @@ document.getElementById('start-scanner').addEventListener('click', function() {
 });
 
 function startScanner() {
+    navigator.mediaDevices.getUserMedia({
+        video: {
+            facingMode: "environment"
+        }
+    }).then(function(stream) {
+        const video = document.getElementById('video');
+        video.srcObject = stream;
+        video.play();
+        initQuagga();
+    }).catch(function(err) {
+        console.log("An error occurred: " + err);
+    });
+}
+
+function initQuagga() {
     Quagga.init({
         inputStream: {
             name: "Live",
@@ -33,6 +48,15 @@ function startScanner() {
 function stopScanner() {
     Quagga.stop();
     Quagga.offDetected(onDetected);
+    const video = document.getElementById('video');
+    const stream = video.srcObject;
+    const tracks = stream.getTracks();
+
+    tracks.forEach(function(track) {
+        track.stop();
+    });
+
+    video.srcObject = null;
     document.getElementById('video-container').style.display = 'none';
 }
 
