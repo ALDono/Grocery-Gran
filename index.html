@@ -1,31 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Barcode Scanner</title>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
-        <style>
-            #video {
-                width: 100%;
-                max-width: 600px;
-                margin: auto;
-                display: block;
-            }
-            #result {
-                text-align: center;
-                margin-top: 20px;
-            }
-        </style>
-    </head>
-    <body>
-        <div id="video-container">
-            <video id="video"></video>
-        </div>
-        <div id="result">
-            <h3>Scanned Barcode: <span id="barcode"></span></h3>
-            <h3>Price: <span id="price"></span></h3>
-        </div>
-        <script src="myScript.js"></script>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barcode Scanner</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+    <style>
+        #video {
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+            display: block;
+        }
+        #result {
+            text-align: center;
+            margin-top: 20px;
+        }
+        #video-container {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <button id="start-scanner">Start Scanner</button>
+    <div id="video-container">
+        <video id="video"></video>
+    </div>
+    <div id="result">
+        <h3>Scanned Barcode: <span id="barcode"></span></h3>
+        <h3>Price: <span id="price"></span></h3>
+    </div>
+    <script src="myScript.js"></script>
+</body>
 </html>
