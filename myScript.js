@@ -31,8 +31,8 @@ function startScanner() {
 }
 
 function stopScanner() {
-    Quagga.offDetected(onDetected);
     Quagga.stop();
+    Quagga.offDetected(onDetected);
     document.getElementById('video-container').style.display = 'none';
 }
 
@@ -44,7 +44,7 @@ function onDetected(data) {
 }
 
 async function fetchPrice(barcode) {
-    const apiKey = 'YOUR_API_KEY';
+    const apiKey = 'YOUR_API_KEY'; // Replace with your Trolley.co.uk API key
     const url = `https://api.trolley.co.uk/v1/products/${barcode}`;
 
     try {
@@ -55,7 +55,7 @@ async function fetchPrice(barcode) {
         });
         const data = await response.json();
         if (data.product && data.product.prices && data.product.prices.length > 0) {
-            const priceInfo = data.product.prices[0];
+            const priceInfo = data.product.prices[0]; // Get the first price entry
             const store = priceInfo.store;
             const price = priceInfo.price;
             document.getElementById('price').innerText = `${store}: £${price}`;
