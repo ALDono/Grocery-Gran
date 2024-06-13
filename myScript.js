@@ -1,47 +1,39 @@
 document.getElementById('start-scanner').addEventListener('click', function() {
-    document.getElementById('video-container').style.display = 'block';
-    startScanner();
+    document.getElementById('cameraInput').click();
 });
 
-function startScanner() {
-    Quagga.init({
-        inputStream: {
-            name: "Live",
-            type: "LiveStream",
-            target: document.querySelector('#video'),
-            constraints: {
-                width: 640,
-                height: 480,
-                facingMode: "environment"
-            }
-        },
-        decoder: {
-            readers: ["ean_reader"]
-        }
-    }, function(err) {
-        if (err) {
-            console.log(err);
-            return;
-        }
-        console.log("QuaggaJS initialized");
-        Quagga.start();
-    });
-
-    Quagga.onDetected(onDetected);
-}
-
-function stopScanner() {
-    Quagga.stop();
-    Quagga.offDetected(onDetected);
-    document.getElementById('video-container').style.display = 'none';
-}
-
-function onDetected(data) {
-    const barcode = data.codeResult.code;
-    document.getElementById('barcode').innerText = barcode;
-    fetchPrice(barcode);
-    stopScanner();
-}
+document.getElementById('cameraInput').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                // Initialize QuaggaJS with the image
+                Quagga.decodeSingle({
+                    src: img.src,
+                    numOfWorkers: 0, // Needs to be 0 when used with decodeSingle
+                    inputStream: {
+                        size: 800 // restrict input-size to be 800px in width (long-side)
+                    },
+                    decoder: {
+                        readers: ["ean_reader"] // List of active readers
+                    }
+                }, function(result) {
+                    if (result && result.codeResult) {
+                        const barcode = result.codeResult.code;
+                        document.getElementById('barcode').innerText = barcode;
+                        fetchPrice(barcode); // Fetch price with the scanned barcode
+                    } else {
+                        document.getElementById('barcode').innerText = 'Barcode not detected';
+                    }
+                });
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+});
 
 async function fetchPrice(barcode) {
     const apiKey = 'YOUR_API_KEY'; // Replace with your Trolley.co.uk API key
